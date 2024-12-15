@@ -1,6 +1,7 @@
 from game_cards.Player import Player
 from DeckOfCards import DeckOfCards
 
+
 class CardGame:
     def __init__(self, player1_name, player2_name, cards_amount=26):
         if not (isinstance(player1_name, str) and isinstance(player2_name, str) and isinstance(cards_amount, int)):
@@ -32,4 +33,3 @@ class CardGame:
         elif len(self.player1.deck) < len(self.player2.deck):
             return self.player2
         return None
-
