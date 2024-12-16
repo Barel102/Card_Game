@@ -3,11 +3,13 @@ from DeckOfCards import DeckOfCards
 
 
 class CardGame:
-    def __init__(self, player1_name, player2_name, cards_amount=26):
-        if not (isinstance(player1_name, str) and isinstance(player2_name, str) and isinstance(cards_amount, int)):
-            raise ValueError
+    """Represents the card game logic."""
 
-        if not 10 <= cards_amount <= 26:
+    def __init__(self, player1_name, player2_name, cards_amount=26):
+        """Initialize the game with two players and a deck of cards."""
+        if not (isinstance(player1_name, str) and isinstance(player2_name, str) and isinstance(cards_amount, int)):
+            raise ValueError("Invalid input types.")
+        if not (10 <= cards_amount <= 26):
             cards_amount = 26
 
         self.cards_amount = cards_amount
@@ -18,8 +20,9 @@ class CardGame:
         self.new_game()
 
     def new_game(self):
+        """Start a new game by shuffling the deck and dealing cards to players."""
         if self.game_started:
-            print('Game already started')
+            print("Game already started")
             return
 
         self.deck.cards_shuffle()
@@ -28,6 +31,7 @@ class CardGame:
         self.game_started = True
 
     def get_winner(self):
+        """Determine the winner based on the number of cards left."""
         if len(self.player1.deck) > len(self.player2.deck):
             return self.player1
         elif len(self.player1.deck) < len(self.player2.deck):

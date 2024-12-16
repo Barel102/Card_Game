@@ -15,6 +15,7 @@ class TestCard(TestCase):
         del self.card1
         del self.card2
         del self.card3
+        del self.card4
 
     def test_init_valid_input(self):
         """Test initialization with valid inputs."""
@@ -25,10 +26,13 @@ class TestCard(TestCase):
         """Test initialization with invalid values."""
         with self.assertRaises(ValueError):
             Card(0, 1)
+
         with self.assertRaises(ValueError):
             Card(14, 1)
+
         with self.assertRaises(ValueError):
             Card("HI", 1)
+
         with self.assertRaises(ValueError):
             Card(None, 1)
 
@@ -36,10 +40,13 @@ class TestCard(TestCase):
         """Test initialization with invalid suits."""
         with self.assertRaises(ValueError):
             Card(1, 0)
+
         with self.assertRaises(ValueError):
             Card(1, 5)
+
         with self.assertRaises(ValueError):
             Card(1, "HI")
+
         with self.assertRaises(ValueError):
             Card(1, None)
 
@@ -57,8 +64,10 @@ class TestCard(TestCase):
         """Test > operator with invalid types."""
         with self.assertRaises(ValueError):
             self.card1 > 'hi'
+
         with self.assertRaises(ValueError):
             self.card1 > 1
+
         with self.assertRaises(ValueError):
             self.card1 > None
 
@@ -74,7 +83,9 @@ class TestCard(TestCase):
         """Test == operator with invalid types."""
         with self.assertRaises(ValueError):
             self.card1 == "Hi"
+
         with self.assertRaises(ValueError):
             self.card1 == 5
+
         with self.assertRaises(ValueError):
             self.card1 == None

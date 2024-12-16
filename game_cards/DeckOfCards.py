@@ -8,7 +8,7 @@ class DeckOfCards:
     def __init__(self):
         """Initialize the deck with all 52 cards."""
         self.cards = [Card(value, suit) for suit in range(1, 5)
-                                            for value in range(1, 14)]
+                      for value in range(1, 14)]
 
     def cards_shuffle(self):
         """Shuffle the deck of cards."""
