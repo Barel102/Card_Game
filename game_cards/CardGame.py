@@ -7,8 +7,12 @@ class CardGame:
 
     def __init__(self, player1_name, player2_name, cards_amount=26):
         """Initialize the game with two players and a deck of cards."""
-        if not (isinstance(player1_name, str) and isinstance(player2_name, str) and isinstance(cards_amount, int)):
-            raise ValueError("Invalid input types.")
+        if not isinstance(player1_name, str):
+            raise ValueError("Player1 name must be a string.")
+        if not isinstance(player2_name, str):
+            raise ValueError("Player2 name must be a string.")
+        if not isinstance(cards_amount, int):
+            raise ValueError("cards_amount must be an integer.")
         if not (10 <= cards_amount <= 26):
             cards_amount = 26
 

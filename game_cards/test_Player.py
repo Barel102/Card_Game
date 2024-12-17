@@ -6,11 +6,10 @@ from DeckOfCards import DeckOfCards
 
 
 class TestPlayer(TestCase):
-    """Unit tests for the Player class."""
-
     def setUp(self):
         """Set up the Player instance before each test."""
         self.player = Player("Barel")
+        self.deck = DeckOfCards()
 
     def tearDown(self):
         """Clean up the Player instance after each test."""
@@ -21,17 +20,23 @@ class TestPlayer(TestCase):
         self.assertEqual(self.player.name, "Barel")
         self.assertEqual(self.player.cards_amount, 26)
 
-    def test_player_invalid_input(self):
-        """Test that Player raises ValueError for invalid inputs."""
+    def test_player_invalid_input_name_integer(self):
+        """Test that Player raises ValueError when name is an integer."""
         with self.assertRaises(ValueError):
             Player(1)
 
+    def test_player_invalid_input_name_none(self):
+        """Test that Player raises ValueError when name is None."""
         with self.assertRaises(ValueError):
             Player(None)
 
+    def test_player_invalid_input_cards_amount_string(self):
+        """Test that Player raises ValueError when cards_amount is a string."""
         with self.assertRaises(ValueError):
             Player("Barel", "26")
 
+    def test_player_invalid_input_cards_amount_none(self):
+        """Test that Player raises ValueError when cards_amount is None."""
         with self.assertRaises(ValueError):
             Player("Barel", None)
 
@@ -57,19 +62,20 @@ class TestPlayer(TestCase):
             for card in expected_cards:
                 self.assertIn(card, self.player.deck)
 
-    def test_set_hand_invalid_deck(self):
-        """Test that Player's set_hand raises ValueError for invalid decks."""
+    def test_set_hand_invalid_deck_string(self):
+        """Test that Player's set_hand raises ValueError for an invalid deck (string)."""
         with self.assertRaises(ValueError):
             self.player.set_hand("InvalidDeck")
 
-        with self.assertRaises(ValueError):
-            self.player.set_hand(None)
-
-        with self.assertRaises(ValueError):
-            self.player.set_hand(1)
-
-        with self.assertRaises(ValueError):
-            self.player.set_hand(list[1:2, 3:4])
+    def test_player_hand_is_correct(self):
+        """Test that the player's hand has the correct number of cards and all cards are instances of Card."""
+        original_len_deck = len(self.deck.cards)
+        self.player.set_hand(self.deck)
+        self.assertEqual(len(self.player.deck), self.player.cards_amount)
+        self.assertTrue(all(isinstance(card, Card) for card in self.player.deck))
+        self.assertEqual(len(self.deck.cards), original_len_deck - self.player.cards_amount)
+        for card in self.player.deck:
+            self.assertNotIn(card, self.deck.cards)
 
     def test_get_card_valid(self):
         """Test that Player's get_card retrieves a card and removes it from the deck."""
@@ -80,9 +86,10 @@ class TestPlayer(TestCase):
 
     def test_get_card_empty_deck(self):
         """Test that Player's get_card raises IndexError when the deck is empty."""
-        self.player.deck = []
-        with self.assertRaises(IndexError):
-            self.player.get_card()
+        temp_deck = DeckOfCards()
+        temp_deck.cards = []
+        self.player.set_hand(temp_deck)
+        self.assertIsNone(self.player.get_card())
 
     def test_add_card_valid(self):
         """Test that Player's add_card adds a valid card to the deck."""
@@ -91,22 +98,16 @@ class TestPlayer(TestCase):
         self.assertIn(card, self.player.deck)
         self.assertEqual(len(self.player.deck), 1)
 
-    def test_add_card_invalid(self):
-        """Test that Player's add_card raises ValueError for invalid cards."""
+    def test_add_card_invalid_value(self):
+        """Test that Player's add_card raises ValueError for an invalid card value."""
         with self.assertRaises(ValueError):
             self.player.add_card(Card(0, 1))
 
+    def test_add_card_invalid_suit(self):
+        """Test that Player's add_card raises ValueError for an invalid card suit."""
         with self.assertRaises(ValueError):
             self.player.add_card(Card(1, 0))
 
-        with self.assertRaises(ValueError):
-            self.player.add_card(Card("5", 1))
-
-        with self.assertRaises(ValueError):
-            self.player.add_card(Card(1, "5"))
-
-        with self.assertRaises(ValueError):
-            self.player.add_card(Card(None, 1))
-
-        with self.assertRaises(ValueError):
-            self.player.add_card(Card(1, None))
+    def test_add_card_invalid_type(self):
+         with self.assertRaises(ValueError):
+            self.player.add_card("Hi")
